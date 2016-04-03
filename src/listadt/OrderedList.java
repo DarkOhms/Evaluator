@@ -1,4 +1,4 @@
-
+package listadt;
 public class OrderedList<T extends Comparable<T>> extends List<T> {
 
 	public void insert(T newEntry){

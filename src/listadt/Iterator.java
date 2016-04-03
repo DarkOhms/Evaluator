@@ -1,4 +1,4 @@
-
+package listadt;
 public class Iterator<T> {
   
   ListItem<T> currentItem = new ListItem<T>();

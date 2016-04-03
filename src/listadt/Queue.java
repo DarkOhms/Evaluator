@@ -1,4 +1,4 @@
-
+package listadt;
 public class Queue <T> extends List <T> {
 
 	public void enqueue(T data){

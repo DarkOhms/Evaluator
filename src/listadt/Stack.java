@@ -1,3 +1,4 @@
+package listadt;
 /**
  * 
  */
@@ -41,6 +42,10 @@ public class Stack <T> extends List<T>{
   }
   public T showTop(){
 	  
-	  return tail.data;
+	  if (tail == null) {
+		  return null;
+	  } else {
+		  return tail.data;		  
+	  }
   }
 }

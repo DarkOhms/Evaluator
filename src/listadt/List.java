@@ -1,3 +1,4 @@
+package listadt;
 /*
  * Luke Martin
  * CISP 430
@@ -56,6 +57,7 @@
  *   (+)enqueue(T) // inserts a ListItem
  *   (+)T dequeue() // removes a ListItem from head
  */
+
 public class List <T> {
 
     ListItem<T> head = null;
