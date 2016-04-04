@@ -25,9 +25,10 @@ public class Parser {
 	     }
 	     
 	     Iterator<String> ob1 = tokens.iterator();
-	     while(!ob1.hasNext()){
+	     while(ob1.hasNext()){
 	         
 	    	 inputSymbol = ob1.nextData();
+	    	 //System.out.println(inputSymbol);
 	    	 switch(inputSymbol){
 	    	 
 	    	   case "=": nested_switch1();
@@ -47,6 +48,8 @@ public class Parser {
 	    	}
 	    	               
 	     } 
+	     //end of input
+	     u2();
     }
   void nested_switch1(){
 		
@@ -121,7 +124,8 @@ public class Parser {
   
   public static void main(String[] args){
 		
-	  Parser obj = new Parser("a=2+3*8");
+	  Parser obj = new Parser("a=(2+3)*8");
+	  
 		obj.parse();
 		
 		while(!obj.s1.isEmpty()){
@@ -144,7 +148,7 @@ public class Parser {
 		s1.push(s2.pop());
 	}
     
-    void u2(){
+    void uc(){
     	while(!s2.isEmpty()){
     		if(s2.showTop().equals("(")){
     			s2.pop();
@@ -154,7 +158,7 @@ public class Parser {
 		}
 	}
     
-    void uc(){
+    void u2(){
 		while(!s2.isEmpty()){
 			s1.push(s2.pop());
 		}
