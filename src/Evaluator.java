@@ -44,12 +44,34 @@ public class Evaluator {
   
   
   String unaryEval(String data, String operator){
+	  double forOp = 0.0;
+	  String result = "";
 	  
+	  if(data.contains("[a-zA-Z]+")){
+		  //reffer to symbol table
+	  }else{
+		  forOp = Double.parseDouble(data);
+	  }
+	  
+	  switch(operator){
+	    case "sin":  result = Double.toString(Math.sin(forOp));
+	                break;
+	    case "sqr":  result = Double.toString(Math.sqrt(forOp));
+	                break;
+	    case "abs":  result = Double.toString(Math.abs(forOp));
+	                break;
+	  }
+		  
 	  return result;
   }
   
   String binaryEval(String data1, String data2, String operator){
 	  
+	  switch(operator){
+	    case "sin":
+	    case "sqr":
+	    case "abs":
+	  }
 	  return result;
   }
   
@@ -97,7 +119,7 @@ public class Evaluator {
   
   public static void main(String[] args){
 	  
-	
+	String number = new String("25");
 	 
   }
 }
