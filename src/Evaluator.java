@@ -76,13 +76,13 @@ public class Evaluator {
 	  
 	  String result = "";
 	  
-	  if(data1.contains("[a-zA-Z]+")){
+	  if(data1.matches("[a-zA-Z]+")){
 		  left = symbols.getData(data1);
 	  }else{
 		  left = Double.parseDouble(data1);
 	  }
 	  
-	  if(data2.contains("[a-zA-Z]+")){
+	  if(data2.matches("[a-zA-Z]+")){
 		  right = symbols.getData(data1);
 	  }else{
 		  right = Double.parseDouble(data2);
