@@ -7,9 +7,8 @@ public class Parser {
     String toParse = new String();
     String inputSymbol = new String();
 	List<String> tokens = new List<String>();
-    Stack<String> s1 = new Stack<String>();
-    Stack<String> s2 = new Stack<String>();  
-   
+    Stack<String> s2 = new Stack<String>();
+    Queue<String> s1 = new Queue<String>();
     
     public Parser(String input){
     	toParse = input;
@@ -121,23 +120,9 @@ public class Parser {
 	        uc();            
 	    }
   }
-  
-  public static void main(String[] args){
-		
-	  Parser obj = new Parser("a=(2+3)*8");
-	  
-	  obj.parse();
-		
-	  while(!obj.s1.isEmpty()){
-			
-		System.out.println(obj.s1.pop());
-			
-	  }
-		
-  }
 	
 	void s1(){
-		s1.push(inputSymbol);
+		s1.enqueue(inputSymbol);
 	}
 	
     void s2(){
@@ -145,7 +130,7 @@ public class Parser {
 	}
     
     void u1(){
-		s1.push(s2.pop());
+		s1.enqueue(s2.pop());
 	}
     
     void uc(){
@@ -154,13 +139,13 @@ public class Parser {
     			s2.pop();
     			break;
     		}
-			s1.push(s2.pop());
+			s1.enqueue(s2.pop());
 		}
 	}
     
     void u2(){
 		while(!s2.isEmpty()){
-			s1.push(s2.pop());
+			s1.enqueue(s2.pop());
 		}
 	}
     

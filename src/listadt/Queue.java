@@ -9,9 +9,15 @@ public class Queue <T> extends List <T> {
 	public T dequeue(){
 		
 		T tempData = head.data;
-		
 		removeHead();
-
-		return tempData;
+        return tempData;
+	}
+	
+	public T firstInLine(){
+		if(head == null){
+			return null;
+		}else{
+			return head.data;
+		}
 	}
 }

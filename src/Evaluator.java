@@ -31,6 +31,7 @@
 import listadt.*;
 import listadt.Queue;
 import listadt.Stack;
+import listadt.Iterator;
 
 import java.util.*;
 
@@ -39,6 +40,8 @@ public class Evaluator {
 	//Parser parse = new Parser();
   
   Stack<String> eval = new Stack<String>();
+  Queue<String> postfix = new Queue<String>();
+  
   
   String unaryEval(String data, String operator){
 	  
@@ -50,16 +53,39 @@ public class Evaluator {
 	  return result;
   }
   
+  public double evaluate(String input){
+	  
+	  //parse the infix
+	  Parser parser = new Parser(input);
+	  parser.parse();
+	  
+	  Iterator<String> it = parser.s1.iterator();
+	  
+	  //put it in postfix queue
+	  while(it.hasNext()){
+		  postfix.enqueue(it.nextData());
+	  }
+	  
+	  //check for operators and put everything else on eval stack
+	  //loop through postfix and evaluate
+	  while(!postfix.isEmpty()){
+		  
+		  if(postfix.firstInLine() == "\\+|\\*|/|sin|sqr|abs"){
+			  //use the operator to evaluate the eval stack
+			  
+		  }else{
+			  eval.push(postfix.dequeue());
+		  }
+	  }
+	  
+	  
+  }
+  
   
   
   public static void main(String[] args){
 	  
-	  String input = new String("a=3*5+6");
-	  StringTokenizer st = new StringTokenizer(input,"=-+*)(", true);
-	     while (st.hasMoreTokens()) {
-	         st.nextToken();
-	         
-	     }
+	
 	 
   }
 }
