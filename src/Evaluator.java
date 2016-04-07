@@ -72,6 +72,18 @@ public class Evaluator {
 		  
 		  if(postfix.firstInLine() == "\\+|\\*|/|sin|sqr|abs"){
 			  //use the operator to evaluate the eval stack
+			  switch(postfix.firstInLine()){
+			    
+			    case "+":
+			    case "-":
+			    case "/":
+			    case "*": eval.push(binaryEval(eval.pop(), eval.pop(), postfix.dequeue()));
+			              break;
+			    case "sin":
+			    case "sqr":
+			    case "abs": eval.push(unaryEval(eval.pop(), postfix.dequeue()));
+			                break;
+			  }
 			  
 		  }else{
 			  eval.push(postfix.dequeue());
