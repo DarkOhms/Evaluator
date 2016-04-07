@@ -67,10 +67,33 @@ public class Evaluator {
   
   String binaryEval(String data1, String data2, String operator){
 	  
+	  double left = 0.0;
+	  double right = 0.0;
+	  
+	  String result = "";
+	  
+	  if(data1.contains("[a-zA-Z]+")){
+		  //reffer to symbol table
+	  }else{
+		  left = Double.parseDouble(data1);
+	  }
+	  
+	  if(data2.contains("[a-zA-Z]+")){
+		  //reffer to symbol table
+	  }else{
+		  right = Double.parseDouble(data2);
+	  }
+	  
+	  
 	  switch(operator){
-	    case "sin":
-	    case "sqr":
-	    case "abs":
+	    case "+":  result = Double.toString(left+right);
+	                break;
+	    case "-":  result = Double.toString(left-right);
+	                break;
+	    case "*":  result = Double.toString(left*right);
+	                break;
+	    case "/":  result = Double.toString(left/right);
+                    break;
 	  }
 	  return result;
   }
