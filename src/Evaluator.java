@@ -15,9 +15,8 @@
  * 
  * Evaluator ---- 1:1 uses ----- Parser
  * Evaluator ---- 1:2 uses ----- Stack  //?
- * Evaluator ---- 1:1 uses ----- Queue
- * Parser ------- 1:2 includes - Stack  //?
- * Parser ------- 1:1 includes-- Queue  //?
+ * Parser ------- 1:1 uses ----- Stack  
+ * Parser ------- 1:1 uses ----- Queue  
  * Parser ------- 1:1 uses ----- StringTokenizer
  * 
  * operator tokens::= {+,-,/,*,Sin,Cos,Sqrt,Abs}
@@ -31,9 +30,7 @@
 import listadt.*;
 import listadt.Queue;
 import listadt.Stack;
-import listadt.Iterator;
-
-import java.util.*;
+import HashTable.*;
 
 public class Evaluator {
   
@@ -41,24 +38,31 @@ public class Evaluator {
   
   Stack<String> eval = new Stack<String>();
   Queue<String> postfix = new Queue<String>();
+  HashTable symbols = new HashTable();
+  
+  {
+	  symbols.insert("A", 25);
+	  symbols.insert("B", 10);
+  }
+  
   
   
   String unaryEval(String data, String operator){
-	  double forOp = 0.0;
+	  double operand = 0.0;
 	  String result = "";
 	  
 	  if(data.contains("[a-zA-Z]+")){
-		  //reffer to symbol table
+		  operand = symbols.getData(data);
 	  }else{
-		  forOp = Double.parseDouble(data);
+		  operand = Double.parseDouble(data);
 	  }
 	  
 	  switch(operator){
-	    case "sin":  result = Double.toString(Math.sin(forOp));
+	    case "sin":  result = Double.toString(Math.sin(operand));
 	                break;
-	    case "sqr":  result = Double.toString(Math.sqrt(forOp));
+	    case "sqr":  result = Double.toString(Math.sqrt(operand));
 	                break;
-	    case "abs":  result = Double.toString(Math.abs(forOp));
+	    case "abs":  result = Double.toString(Math.abs(operand));
 	                break;
 	  }
 		  
@@ -73,13 +77,13 @@ public class Evaluator {
 	  String result = "";
 	  
 	  if(data1.contains("[a-zA-Z]+")){
-		  //reffer to symbol table
+		  left = symbols.getData(data1);
 	  }else{
 		  left = Double.parseDouble(data1);
 	  }
 	  
 	  if(data2.contains("[a-zA-Z]+")){
-		  //reffer to symbol table
+		  right = symbols.getData(data1);
 	  }else{
 		  right = Double.parseDouble(data2);
 	  }
@@ -104,45 +108,55 @@ public class Evaluator {
 	  Parser parser = new Parser(input);
 	  parser.parse();
 	  
-	  Iterator<String> it = parser.s1.iterator();
-	  
-	  //put it in postfix queue
-	  while(it.hasNext()){
-		  postfix.enqueue(it.nextData());
-	  }
-	  
+	  //prime the eval stack with the symbol for assignment
 	  //check for operators and put everything else on eval stack
-	  //loop through postfix and evaluate
-	  while(!postfix.isEmpty()){
+	  //loop through parser.s1 and evaluate
+	  
+	  eval.push(parser.s1.dequeue());
+	  double data = 0.0;
+	  
+	  while(!parser.s1.isEmpty()){
 		  
-		  if(postfix.firstInLine() == "\\+|\\*|/|sin|sqr|abs"){
+		  if(parser.s1.firstInLine().matches("=")){
+			  
+			  data = Double.parseDouble(eval.pop());
+			  String key = eval.pop();
+			  symbols.insert(key, data);
+			  return data;
+		  }
+		  if(parser.s1.firstInLine().matches("\\+|\\*|/|sin|sqr|abs")){
 			  //use the operator to evaluate the eval stack
-			  switch(postfix.firstInLine()){
+			  switch(parser.s1.firstInLine()){
 			    
 			    case "+":
 			    case "-":
 			    case "/":
-			    case "*": eval.push(binaryEval(eval.pop(), eval.pop(), postfix.dequeue()));
+			    case "*": eval.push(binaryEval(eval.pop(), eval.pop(), parser.s1.dequeue()));
 			              break;
 			    case "sin":
 			    case "sqr":
-			    case "abs": eval.push(unaryEval(eval.pop(), postfix.dequeue()));
+			    case "abs": eval.push(unaryEval(eval.pop(), parser.s1.dequeue()));
 			                break;
 			  }
 			  
 		  }else{
-			  eval.push(postfix.dequeue());
+			  eval.push(parser.s1.dequeue());
 		  }
+		  
 	  }
-	  
-	  
+	  return data;	  
   }
   
   
   
   public static void main(String[] args){
 	  
-	String number = new String("25");
+	String userInput = new String("X=12*(A+3)");
+	
+	//if A is stored as 25, upon evaluation this should assign 336 to X in the symbol table
+	
+	Evaluator eze = new Evaluator();
+	System.out.println(eze.evaluate(userInput));
 	 
   }
 }
