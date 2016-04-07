@@ -64,18 +64,19 @@ public class List <T> {
     ListItem<T> tail = null;
     int count = 0;
 
+    //inserts at tail
     public void insert(T newEntry){
 
-        ListItem<T> nextEntry = new ListItem<T>(newEntry);
-        if(head == null) {
-            head = nextEntry;
-            tail = head;
-        }else{
-        	nextEntry.prev = tail;
-        	tail.next = nextEntry;
-        	tail = nextEntry;
-        }
-        	count++;
+    	 ListItem<T> nextEntry = new ListItem<T>(newEntry);
+         if(head == null) {
+             head = nextEntry;
+             tail = head;
+         }else{
+         	nextEntry.prev = tail;
+         	tail.next = nextEntry;
+         	tail = nextEntry;
+         }
+         	count++;
     }
   
     public void delete(T data){
@@ -143,6 +144,35 @@ public class List <T> {
        
        return false;
         
+    }
+    public void removeHead(){
+       
+    	if(count == 1){
+    		head = null;
+    		tail = null;
+    		count--;
+    	}
+    	if(count > 1){
+    		head.next.prev = null;
+    		head = head.next;
+    		count--;
+    	}
+        
+    }
+    
+    public void removeTail(){
+    	
+    	if(count == 1){
+    		head = null;
+    		tail = null;
+    		count--;
+    	}
+    	if(count > 1){
+    		tail.prev.next = null;
+    		tail = tail.prev;
+    		count--;
+    	}
+    	
     }
  
     public Iterator<T> iterator(){

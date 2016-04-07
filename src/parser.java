@@ -8,8 +8,7 @@ public class Parser {
     String inputSymbol = new String();
 	List<String> tokens = new List<String>();
     Stack<String> s1 = new Stack<String>();
-    Stack<String> s2 = new Stack<String>();
-    Queue<String> q1 = new Queue<String>();  
+    Stack<String> s2 = new Stack<String>();  
    
     
     public Parser(String input){
@@ -86,22 +85,23 @@ public class Parser {
   void nested_switch3(){
 		
 		if(s2.showTop() == null){
+			//throw
 			System.out.println("Error");
-	    }
+	    }else{
 	  	
-		switch(s2.showTop()){
+		  switch(s2.showTop()){
 	            
-	  	    case "=":
-	  	    case "-":
-	  	    case "+":
-	  	    case "(": s2();
-	  	               break;
-	  	    case "*": 
-	  	    case "/": u1();
-	  	              break;
-	  	    
-	  	               
-	    }
+	  	      case "=":
+	  	      case "-":
+	  	      case "+":
+	  	      case "(": s2();
+	  	                 break;
+	  	      case "*": 
+	  	      case "/": u1();
+	  	                break;
+	  	      	               
+	     }
+	  }
   }
   
   void nested_switch4(){
@@ -126,13 +126,13 @@ public class Parser {
 		
 	  Parser obj = new Parser("a=(2+3)*8");
 	  
-		obj.parse();
+	  obj.parse();
 		
-		while(!obj.s1.isEmpty()){
+	  while(!obj.s1.isEmpty()){
 			
-			System.out.println(obj.s1.pop());
+		System.out.println(obj.s1.pop());
 			
-		}
+	  }
 		
   }
 	
@@ -164,7 +164,7 @@ public class Parser {
 		}
 	}
     
-    void uerror(){
+    void uError(){
     	
     }
   

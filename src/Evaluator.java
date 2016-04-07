@@ -29,6 +29,7 @@
  */
 
 import listadt.*;
+import listadt.Queue;
 import listadt.Stack;
 
 import java.util.*;
@@ -38,6 +39,18 @@ public class Evaluator {
 	//Parser parse = new Parser();
   
   Stack<String> eval = new Stack<String>();
+  
+  String unaryEval(String data, String operator){
+	  
+	  return result;
+  }
+  
+  String binaryEval(String data1, String data2, String operator){
+	  
+	  return result;
+  }
+  
+  
   
   public static void main(String[] args){
 	  
