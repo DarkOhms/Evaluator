@@ -13,10 +13,31 @@ public class Parser {
     public Parser(String input){
     	toParse = input;
     }
+    
+  void parseTable(String inputSymbol){
+    	
+    switch(inputSymbol){
+   	 
+ 	   case "=": nested_switch1();
+ 	             break;
+ 	   case "+":
+ 	   case "-": nested_switch2();
+ 	             break;
+ 	   case "*":
+ 	   case "/": nested_switch3();
+ 	             break;
+ 	   case "(": nested_switch4();
+ 	             break;
+ 	   case ")": nested_switch5();
+ 	             break;
+ 	   default: s1();
+ 	            break;
+    }
+  }
 	
     public void parse(){  	
     	
-    	StringTokenizer st = new StringTokenizer(toParse,"=-+*)(", true);
+    	StringTokenizer st = new StringTokenizer(toParse,"=-+*/)(", true);
 	     while (st.hasMoreTokens()) {
 	         tokens.insert(st.nextToken());
 	         
@@ -26,24 +47,7 @@ public class Parser {
 	     while(ob1.hasNext()){
 	         
 	    	 inputSymbol = ob1.nextData();
-	    	 //System.out.println(inputSymbol);
-	    	 switch(inputSymbol){
-	    	 
-	    	   case "=": nested_switch1();
-	    	             break;
-	    	   case "+":
-	    	   case "-": nested_switch2();
-	    	             break;
-	    	   case "*":
-	    	   case "/": nested_switch3();
-	    	             break;
-	    	   case "(": nested_switch4();
-	    	             break;
-	    	   case ")": nested_switch5();
-	    	             break;
-	    	   default: s1();
-	    	            break;
-	    	}
+	    	 parseTable(inputSymbol);
 	    	               
 	     } 
 	     //end of input
@@ -131,6 +135,7 @@ public class Parser {
     
     void u1(){
 		s1.enqueue(s2.pop());
+		parseTable(inputSymbol);
 	}
     
     void uc(){

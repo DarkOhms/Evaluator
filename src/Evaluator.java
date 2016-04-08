@@ -34,15 +34,15 @@ import HashTable.*;
 
 public class Evaluator {
   
-	//Parser parse = new Parser();
-  
   Stack<String> eval = new Stack<String>();
   Queue<String> postfix = new Queue<String>();
   HashTable symbols = new HashTable();
   
   {
-	  symbols.insert("A", 25);
-	  symbols.insert("B", 10);
+	  symbols.insert("alpha", 25);
+	  symbols.insert("beta", 10);
+	  symbols.insert("charlie", 6);
+	  symbols.insert("delta", 11);
   }
   
   
@@ -77,15 +77,15 @@ public class Evaluator {
 	  String result = "";
 	  
 	  if(data1.matches("[a-zA-Z]+")){
-		  left = symbols.getData(data1);
+		  right = symbols.getData(data1);
 	  }else{
-		  left = Double.parseDouble(data1);
+		  right = Double.parseDouble(data1);
 	  }
 	  
 	  if(data2.matches("[a-zA-Z]+")){
-		  right = symbols.getData(data1);
+		  left = symbols.getData(data2);
 	  }else{
-		  right = Double.parseDouble(data2);
+		  left = Double.parseDouble(data2);
 	  }
 	  
 	  
@@ -151,11 +151,21 @@ public class Evaluator {
   
   public static void main(String[] args){
 	  
-	String userInput = new String("X=12*(A+3)");
+	String userInput = new String("X=12*(alpha+3)");
 	
-	//if A is stored as 25, upon evaluation this should assign 336 to X in the symbol table
+	System.out.println("symbols.insert(\"alpha\", 25)");
+	System.out.println("symbols.insert(\"beta\", 10)");
+	System.out.println("symbols.insert(\"charlie\", 6)");
+	System.out.println("symbols.insert(\"delta\", 11)");
+	
+	System.out.println("userInput = X=12*(alpha+3) ");
 	
 	Evaluator eze = new Evaluator();
+	System.out.println("X is:" + eze.evaluate(userInput));
+	
+	System.out.println("userInput = \"X = alpha + beta / charlie * delta\"");
+	
+	userInput = "X = alpha + beta / charlie * delta";
 	System.out.println(eze.evaluate(userInput));
 	 
   }

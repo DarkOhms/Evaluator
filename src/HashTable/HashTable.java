@@ -30,13 +30,10 @@ public class HashTable{
     	initializeHT();
     }
     
-    
-    private void hashFunction(String key){
-    	
-    	int intermediateValue;
-    	
-    	//handle length discrepancys
-    	if(key.length() < 10){
+   
+    String fitKey(String key){
+	   
+	   if(key.length() < 10){
 	    	  while(key.length() < 10){
 	    		  String newString = new String(" ");
 	    		  key += newString;
@@ -44,6 +41,16 @@ public class HashTable{
 	      }else{
 	    	  key = key.substring(0,10);
 	      }
+	   return key;
+   }
+    
+    
+    private void hashFunction(String key){
+    	
+    	int intermediateValue;
+    	
+    	//handle length discrepancys
+    	key = fitKey(key);
     	
     	intermediateValue = (int)(key.charAt(0)) + (int)(key.charAt(2)) + (int)(key.charAt(4));
 			index = intermediateValue%20;
@@ -97,7 +104,9 @@ public class HashTable{
 	 
 	 hashFunction(tempKey);
 	 
-	 return buckets[index].slots[buckets[index].searchBucket(tempKey)].getData();
+	 int slotResult = buckets[index].searchBucket(tempKey);
+	 
+	 return buckets[index].slots[slotResult].getData();
 	 
  }
  
