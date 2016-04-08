@@ -102,7 +102,7 @@ public class Evaluator {
 	  return result;
   }
   
-  public double evaluate(String input){
+  public double evaluate(String input) throws SyntaxError{
 	  
 	  //parse the infix
 	  Parser parser = new Parser(input);
@@ -161,12 +161,31 @@ public class Evaluator {
 	System.out.println("userInput = X=12*(alpha+3) ");
 	
 	Evaluator eze = new Evaluator();
-	System.out.println("X is:" + eze.evaluate(userInput));
 	
-	System.out.println("userInput = \"X = alpha + beta / charlie * delta\"");
+	try{
+		System.out.println("X is:" + eze.evaluate(userInput));
+	}catch(SyntaxError e){
+		 System.out.println(e.getMessage());
+	}
 	
-	userInput = "X = alpha + beta / charlie * delta";
-	System.out.println(eze.evaluate(userInput));
-	 
+	System.out.println("userInput = \"alpha = alpha + beta / charlie * delta\"");
+	
+	userInput = "alpha = alpha + beta / charlie * delta";
+	
+	try{
+	    System.out.println("alpha is:" + eze.evaluate(userInput));
+	}catch(SyntaxError e){
+		System.out.println(e.getMessage());
+	}
+	
+   System.out.println("userInput = \"beta = 5/2.0 + alpha\"");
+	
+	userInput = "beta = 5/2.0 + alpha";
+	
+	try{
+	    System.out.println("beta is:" + eze.evaluate(userInput));
+	}catch(SyntaxError e){
+		System.out.println(e.getMessage());
+	}
   }
 }

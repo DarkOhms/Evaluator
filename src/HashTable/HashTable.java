@@ -21,11 +21,6 @@ public class HashTable{
 	// overflow index for populate function
 	int overflowIndex;
     
-    //search data
-    String[] search = new String[20];
-    
-    //search results
-    searchResult[] results = new searchResult[20];
     {
     	initializeHT();
     }
@@ -73,31 +68,37 @@ public class HashTable{
   //hash insert 
   public void insert(String tempKey, double tempData){
 	  
-		 
-		  //grab key and data from allData to prep for insert
-		  
-		  hashFunction(tempKey);
-		  
-		  //check bucket index for free slot and insert or find overflow
-		  if(buckets[index].hasFreeSlot())
-			  buckets[index].fillSlot(tempKey, tempData);
-		  else
-			  if(buckets[index].hasOverflow()){
-				 overflowIndex = buckets[index].getOverflow();
-		         overflow[overflowIndex].fillSlot(tempKey, tempData);
-			  }else{
-				 //allocate overflow and set overflow index
-				 overflowIndex = allocateOverflow();
-				 //System.out.println("Overflow index is: " + overflowIndex);
-				 
-				 //link bucket to an overflow bucket
-				 buckets[index].setOverflow(overflowIndex);
-				 
-				 //fill overflow with temp key and data
-				 overflow[overflowIndex].fillSlot(tempKey, tempData);
-				 
-			  }
-		  
+  //check to see if the symbol already exists in the table
+  searchResult checkForNew = searchHash(tempKey);
+  
+  if(checkForNew.found && checkForNew.key.equals(tempKey)){
+	  buckets[checkForNew.inBucket()].getSlot(checkForNew.slot).setData(tempData);
+  }else{
+	  //grab key and data from allData to prep for insert
+	  
+	  hashFunction(tempKey);
+	  
+	  //check bucket index for free slot and insert or find overflow
+	  if(buckets[index].hasFreeSlot())
+		  buckets[index].fillSlot(tempKey, tempData);
+	  else{
+		  if(buckets[index].hasOverflow()){
+			 overflowIndex = buckets[index].getOverflow();
+	         overflow[overflowIndex].fillSlot(tempKey, tempData);
+		  }else{
+			 //allocate overflow and set overflow index
+			 overflowIndex = allocateOverflow();
+			 //System.out.println("Overflow index is: " + overflowIndex);
+			 
+			 //link bucket to an overflow bucket
+			 buckets[index].setOverflow(overflowIndex);
+			 
+			 //fill overflow with temp key and data
+			 overflow[overflowIndex].fillSlot(tempKey, tempData);
+			 
+		  }
+	  }
+    }	  
   }
   
  public double getData(String tempKey){
@@ -110,23 +111,22 @@ public class HashTable{
 	 
  }
  
- public void searchHash(String tempKey){
+ public searchResult searchHash(String tempKey){
 	  
-	  
-	  for(int i = 0; i < search.length; i++){
-		
-		   hashFunction(tempKey);
+	searchResult result = new searchResult();
+		   
+	 hashFunction(tempKey);
 		  
 		  //check bucket index for key match
 		  
 		  int slotResult = buckets[index].searchBucket(tempKey);
 		  
 		  if(slotResult != -1){
-			  results[i].foundKey(tempKey);
-			  results[i].wasFound();
-			  results[i].inSlot(slotResult);
-			  results[i].inBucket(index);
-			  results[i].foundData(buckets[index].getSlot(slotResult).getData());
+			  result.foundKey(tempKey);
+			  result.wasFound();
+			  result.inSlot(slotResult);
+			  result.inBucket(index);
+			  result.foundData(buckets[index].getSlot(slotResult).getData());
 			  
 		  }else//if bucket has an overflow bucket, search that bucket then store result in results[]
 			   if(buckets[index].hasOverflow()){
@@ -138,24 +138,23 @@ public class HashTable{
 				 if(slotResult != -1){
 				   
 				   //System.out.println(slotResult);
-				   results[i].foundKey(tempKey);
-				   results[i].wasFound();
-				   results[i].inSlot(slotResult);
-			       results[i].inBucket(overflowIndex);
-				   results[i].foundData(overflow[overflowIndex].getSlot(slotResult).getData());
-				   results[i].setOverflow(true);
+				   result.foundKey(tempKey);
+				   result.wasFound();
+				   result.inSlot(slotResult);
+			       result.inBucket(overflowIndex);
+				   result.foundData(overflow[overflowIndex].getSlot(slotResult).getData());
+				   result.setOverflow(true);
 				 }else{
 					   //System.out.println("Could not find " + tempKey);
-					   results[i].missingKey(tempKey);
+					   result.missingKey(tempKey);
 					 }
 			 
 				 
 			  }else{
 				  //System.out.println("Could not find " + tempKey);
-				  results[i].missingKey(tempKey);
+				  result.missingKey(tempKey);
 			  }
-		  
-	  }
+		  return result;
 	  
   }
   
@@ -322,11 +321,10 @@ class bucket{
 	  
 		for(int i = 0; i < count; i++){
 			if(Objects.equals(slots[i].getKey(),key)){
-				//System.out.println("Found in slot: " + i);
 				return i;
 				
 			}else{
-				//System.out.println("Not found in slot: " + i); 
+				
 			}
 		}return -1;
 	

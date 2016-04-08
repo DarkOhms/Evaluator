@@ -1,8 +1,7 @@
 import java.util.StringTokenizer;
-
 import listadt.*;
 
-public class Parser {
+public class Parser{
 
     String toParse = new String();
     String inputSymbol = new String();
@@ -14,7 +13,7 @@ public class Parser {
     	toParse = input;
     }
     
-  void parseTable(String inputSymbol){
+  void parseTable(String inputSymbol) throws SyntaxError{
     	
     switch(inputSymbol){
    	 
@@ -35,8 +34,9 @@ public class Parser {
     }
   }
 	
-    public void parse(){  	
+    public void parse() throws SyntaxError{  	
     	
+    	toParse = toParse.replaceAll("\\s+","");
     	StringTokenizer st = new StringTokenizer(toParse,"=-+*/)(", true);
 	     while (st.hasMoreTokens()) {
 	         tokens.insert(st.nextToken());
@@ -53,21 +53,21 @@ public class Parser {
 	     //end of input
 	     u2();
     }
-  void nested_switch1(){
+  void nested_switch1() throws SyntaxError{
 		
      if(s2.showTop() == null){
     	s2();
      }else{
-       	System.out.println("Error");
+       	throw new SyntaxError("SyntaxError ");
      }
     	
     	
   }
     
-  void nested_switch2(){
+  void nested_switch2() throws SyntaxError{
 	
 	if(s2.showTop() == null){
-		System.out.println("Error");
+		throw new SyntaxError("SyntaxError ");
     }
   	
 	switch(s2.showTop()){
@@ -85,11 +85,10 @@ public class Parser {
     }
   }
   
-  void nested_switch3(){
+  void nested_switch3() throws SyntaxError{
 		
 		if(s2.showTop() == null){
-			//throw
-			System.out.println("Error");
+			uError();
 	    }else{
 	  	
 		  switch(s2.showTop()){
@@ -107,19 +106,19 @@ public class Parser {
 	  }
   }
   
-  void nested_switch4(){
+  void nested_switch4() throws SyntaxError{
 		
 	if(s2.showTop() == null){
-		System.out.println("Error");
+		uError();
     }else{
         s2();             
     }
   }
   
-  void nested_switch5(){
+  void nested_switch5() throws SyntaxError{
 		
 		if(s2.showTop() == null||s2.showTop().equals("=")){
-			System.out.println("Error");
+			uError();
 	    }else{
 	        uc();            
 	    }
@@ -133,7 +132,7 @@ public class Parser {
 		s2.push(inputSymbol);
 	}
     
-    void u1(){
+    void u1() throws SyntaxError{
 		s1.enqueue(s2.pop());
 		parseTable(inputSymbol);
 	}
@@ -154,8 +153,8 @@ public class Parser {
 		}
 	}
     
-    void uError(){
-    	
+    void uError() throws SyntaxError{
+    	throw new SyntaxError("SyntaxError ");
     }
   
 }
