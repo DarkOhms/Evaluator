@@ -1,0 +1,69 @@
+symbols.insert("alpha", 25)
+symbols.insert("beta", 10)
+symbols.insert("charlie", 6)
+symbols.insert("delta", 11)
+userInput = X=12*(alpha+3) 
+alpha   EXPECTED: 25
+beta    EXPECTED: 10
+charlie EXPECTED: 6
+delta   EXPECTED: 11
+X       EXPECTED: 336 
+X is:336.0
+-------------------Actual------------------
+alpha contains   :25.0
+beta contains    :10.0
+charlie contains :6.0
+delta contains   :11.0
+X contains       :336.0
+userInput = "alpha = alpha + beta / charlie * delta"
+alpha   EXPECTED: 43.33333333333
+beta    EXPECTED: 10
+charlie EXPECTED: 6
+delta   EXPECTED: 11
+X       EXPECTED: 336 
+alpha is:43.333333333333336
+-------------------Actual------------------
+alpha contains   :43.333333333333336
+beta contains    :10.0
+charlie contains :6.0
+delta contains   :11.0
+X contains       :336.0
+userInput = "beta = 5/2.0 + alpha"
+alpha   EXPECTED: 43.33333333333
+beta    EXPECTED: 45.83333333333
+charlie EXPECTED: 6
+delta   EXPECTED: 11
+X       EXPECTED: 336 
+beta is:45.833333333333336
+-------------------Actual------------------
+alpha contains   :43.333333333333336
+beta contains    :45.833333333333336
+charlie contains :6.0
+delta contains   :11.0
+X contains       :336.0
+userInput = "charlie = sin(alpha) + (charlie-delta)"
+alpha   EXPECTED: 43.33333333333
+beta    EXPECTED: 45.83333333333
+charlie EXPECTED: -5.60436119243
+delta   EXPECTED: 11
+X       EXPECTED: 336 
+charlie is:-5.604361192437493
+-------------------Actual------------------
+alpha contains   :43.333333333333336
+beta contains    :45.833333333333336
+charlie contains :-5.604361192437493
+delta contains   :11.0
+X contains       :336.0
+userInput = "delta = alpha - beta * charlie/delta"
+alpha   EXPECTED: 43.33333333333
+beta    EXPECTED: 45.83333333333
+charlie EXPECTED: -5.60436119243
+delta   EXPECTED: 66.68483830182
+X       EXPECTED: 336 
+charlie is:66.6848383018229
+-------------------Actual------------------
+alpha contains   :43.333333333333336
+beta contains    :45.833333333333336
+charlie contains :-5.604361192437493
+delta contains   :66.6848383018229
+X contains       :336.0

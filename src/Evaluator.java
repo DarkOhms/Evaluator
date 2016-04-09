@@ -152,6 +152,7 @@ public class Evaluator {
   public static void main(String[] args){
 	  
 	String userInput = new String("X=12*(alpha+3)");
+	Evaluator eze = new Evaluator();
 	
 	System.out.println("symbols.insert(\"alpha\", 25)");
 	System.out.println("symbols.insert(\"beta\", 10)");
@@ -160,7 +161,11 @@ public class Evaluator {
 	
 	System.out.println("userInput = X=12*(alpha+3) ");
 	
-	Evaluator eze = new Evaluator();
+	System.out.println("alpha   EXPECTED: 25");
+	System.out.println("beta    EXPECTED: 10");
+	System.out.println("charlie EXPECTED: 6");
+	System.out.println("delta   EXPECTED: 11");
+	System.out.println("X       EXPECTED: 336 ");
 	
 	try{
 		System.out.println("X is:" + eze.evaluate(userInput));
@@ -168,9 +173,18 @@ public class Evaluator {
 		 System.out.println(e.getMessage());
 	}
 	
+	System.out.println("-------------------Actual------------------");
+	display(eze);
+	
 	System.out.println("userInput = \"alpha = alpha + beta / charlie * delta\"");
 	
 	userInput = "alpha = alpha + beta / charlie * delta";
+	
+	System.out.println("alpha   EXPECTED: 43.33333333333");
+	System.out.println("beta    EXPECTED: 10");
+	System.out.println("charlie EXPECTED: 6");
+	System.out.println("delta   EXPECTED: 11");
+	System.out.println("X       EXPECTED: 336 ");
 	
 	try{
 	    System.out.println("alpha is:" + eze.evaluate(userInput));
@@ -178,24 +192,76 @@ public class Evaluator {
 		System.out.println(e.getMessage());
 	}
 	
-   System.out.println("userInput = \"beta = 5/2.0 + alpha\"");
+	System.out.println("-------------------Actual------------------");
+	display(eze);
+	
+    System.out.println("userInput = \"beta = 5/2.0 + alpha\"");
 	
 	userInput = "beta = 5/2.0 + alpha";
 	
+	System.out.println("alpha   EXPECTED: 43.33333333333");
+	System.out.println("beta    EXPECTED: 45.83333333333");
+	System.out.println("charlie EXPECTED: 6");
+	System.out.println("delta   EXPECTED: 11");
+	System.out.println("X       EXPECTED: 336 ");
+	
 	try{
-	    System.out.println("beta is:" + eze.evaluate(userInput));
+		System.out.println("beta is:" + eze.evaluate(userInput));
 	}catch(SyntaxError e){
 		System.out.println(e.getMessage());
 	}
 	
+	System.out.println("-------------------Actual------------------");
+	display(eze);
+	
 	System.out.println("userInput = \"charlie = sin(alpha) + (charlie-delta)\"");
 		
-		userInput = "charlie = sin(alpha) + (charlie-delta)";
+	userInput = "charlie = sin(alpha) + (charlie-delta)";
+		
+	System.out.println("alpha   EXPECTED: 43.33333333333");
+	System.out.println("beta    EXPECTED: 45.83333333333");
+	System.out.println("charlie EXPECTED: -5.60436119243");
+	System.out.println("delta   EXPECTED: 11");
+	System.out.println("X       EXPECTED: 336 ");
 		
 		try{
 		    System.out.println("charlie is:" + eze.evaluate(userInput));
 		}catch(SyntaxError e){
 			System.out.println(e.getMessage());
 		}
+	
+	System.out.println("-------------------Actual------------------");
+	display(eze);
+	
+	System.out.println("userInput = \"delta = alpha - beta * charlie/delta\"");
+	
+	userInput = "delta = alpha - beta * charlie/delta";
+		
+	System.out.println("alpha   EXPECTED: 43.33333333333");
+	System.out.println("beta    EXPECTED: 45.83333333333");
+	System.out.println("charlie EXPECTED: -5.60436119243");
+	System.out.println("delta   EXPECTED: 66.68483830182");
+	System.out.println("X       EXPECTED: 336 ");
+		
+		try{
+		    System.out.println("charlie is:" + eze.evaluate(userInput));
+		}catch(SyntaxError e){
+			System.out.println(e.getMessage());
+		}
+	
+	System.out.println("-------------------Actual------------------");
+	display(eze);
+	
   }//end main
+  
+  public static void display(Evaluator eval){
+	  
+	System.out.println("alpha contains   :" + eval.symbols.getData("alpha"));
+	System.out.println("beta contains    :" + eval.symbols.getData("beta"));
+	System.out.println("charlie contains :" + eval.symbols.getData("charlie"));
+	System.out.println("delta contains   :" + eval.symbols.getData("delta"));
+	System.out.println("X contains       :" + eval.symbols.getData("X"));
+	  
+	
+  }
 }
