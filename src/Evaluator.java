@@ -41,7 +41,7 @@ public class Evaluator {
   {
 	  symbols.insert("alpha", 25);
 	  symbols.insert("beta", 10);
-	  symbols.insert("charlie", 6);
+	  symbols.insert("charlie", 6.0);
 	  symbols.insert("delta", 11);
   }
   
@@ -51,7 +51,7 @@ public class Evaluator {
 	  double operand = 0.0;
 	  String result = "";
 	  
-	  if(data.contains("[a-zA-Z]+")){
+	  if(data.matches("[a-zA-Z]+")){
 		  operand = symbols.getData(data);
 	  }else{
 		  operand = Double.parseDouble(data);
@@ -124,7 +124,7 @@ public class Evaluator {
 			  symbols.insert(key, data);
 			  return data;
 		  }
-		  if(parser.s1.firstInLine().matches("\\+|\\*|/|sin|sqr|abs")){
+		  if(parser.s1.firstInLine().matches("\\+|\\*|/|sin|sqr|abs|-")){
 			  //use the operator to evaluate the eval stack
 			  switch(parser.s1.firstInLine()){
 			    
@@ -187,5 +187,15 @@ public class Evaluator {
 	}catch(SyntaxError e){
 		System.out.println(e.getMessage());
 	}
-  }
+	
+	System.out.println("userInput = \"charlie = sin(alpha) + (charlie-delta)\"");
+		
+		userInput = "charlie = sin(alpha) + (charlie-delta)";
+		
+		try{
+		    System.out.println("charlie is:" + eze.evaluate(userInput));
+		}catch(SyntaxError e){
+			System.out.println(e.getMessage());
+		}
+  }//end main
 }

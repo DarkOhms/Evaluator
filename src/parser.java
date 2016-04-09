@@ -25,6 +25,9 @@ public class Parser{
  	   case "*":
  	   case "/": nested_switch3();
  	             break;
+ 	   case "sin":
+	   case "abs":
+	   case "sqr":
  	   case "(": nested_switch4();
  	             break;
  	   case ")": nested_switch5();
@@ -138,14 +141,25 @@ public class Parser{
 	}
     
     void uc(){
+    	
     	while(!s2.isEmpty()){
+    		
     		if(s2.showTop().equals("(")){
     			s2.pop();
+    			unaryCheck();
     			break;
     		}
+    		
 			s1.enqueue(s2.pop());
 		}
 	}
+    
+    public void unaryCheck(){
+    	
+    	if(s2.showTop().contains("abs") || s2.showTop().contains("sin") || s2.showTop().contains("sqr")){
+    		s1.enqueue(s2.pop());
+    	}
+    }
     
     void u2(){
 		while(!s2.isEmpty()){
