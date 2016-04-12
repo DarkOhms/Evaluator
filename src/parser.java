@@ -60,7 +60,7 @@ public class Parser{
     }
   private void nested_switch1() throws SyntaxError{
 		
-     if(s2.showTop() == null){
+     if(s2.showTop() == null && s1.getCount() == 1){
     	s2();
      }else{
        	throw new SyntaxError("SyntaxError ");
