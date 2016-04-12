@@ -205,26 +205,7 @@ public class HashTable{
 		}
   }
   
-  public void searchReport(){
-	  
-	  try{
-		  PrintWriter writer = new PrintWriter("searchresults.txt");
-	  
-	  writer.println("                   SEARCH REULTS                                ");
-	  writer.println("================================================================");
-	  
-	  for (searchResult result : results) {
-			if (result.found) {
-				writer.println(result.key + " found in bucket " + result.bucket + ": slot " + result.slot);
-			} else {
-				writer.println(result.key + " not found");
-			}
-		  }
-	  writer.close();
-	  }catch(FileNotFoundException e) {
-			System.out.println("File not found");
-		}
-  }
+ 
   
   public int getChainLength(bucket b){
 	  

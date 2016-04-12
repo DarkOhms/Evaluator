@@ -10,7 +10,7 @@ public class Test {
 	  
 	  Test test = new Test();
 	  test.unaryCheck();
-	  if(check.contains("[a-zA-Z]+")){
+	  if(test.check.contains("[a-zA-Z]+")){
 		  System.out.println("True");
 	  }
 	  
