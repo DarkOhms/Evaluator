@@ -324,6 +324,32 @@ public class Evaluator {
 		}catch(SyntaxError e){
 			System.out.println(e.getMessage());
 		}
+		
+		System.out.println("userInput = \"-  - + *\"");
+
+		userInput = "- - + *";
+
+		System.out.println("EXPECTED: SyntaxError");
+		System.out.println("-------------------Actual------------------");
+
+		try{
+			System.out.println("charlie is:" + eze.evaluate(userInput));
+		}catch(SyntaxError e){
+			System.out.println(e.getMessage());
+		}
+		
+		System.out.println("userInput = \"alpha + zeta\"");
+
+		userInput = "alpha + zeta";
+
+		System.out.println("EXPECTED: SymbolNotFound");
+		System.out.println("-------------------Actual------------------");
+
+		try{
+			System.out.println("charlie is:" + eze.evaluate(userInput));
+		}catch(SyntaxError | SymbolNotFound e){
+			System.out.println(e.getMessage());
+		}
 
 	}//end main
 
