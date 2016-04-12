@@ -1,3 +1,4 @@
+package Errors;
 
 public class SyntaxError extends Exception {
 	 

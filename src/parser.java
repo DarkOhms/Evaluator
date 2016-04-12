@@ -1,13 +1,15 @@
 import java.util.StringTokenizer;
+
+import Errors.SyntaxError;
 import listadt.*;
 
 public class Parser{
 
-    String toParse = new String();
-    String inputSymbol = new String();
-	List<String> tokens = new List<String>();
-    Stack<String> s2 = new Stack<String>();
-    Queue<String> s1 = new Queue<String>();
+    private String toParse = new String();
+    private String inputSymbol = new String();
+	private List<String> tokens = new List<String>();
+    private Stack<String> s2 = new Stack<String>();
+    protected Queue<String> s1 = new Queue<String>();
     
     public Parser(String input){
     	toParse = input;
@@ -56,7 +58,7 @@ public class Parser{
 	     //end of input
 	     u2();
     }
-  void nested_switch1() throws SyntaxError{
+  private void nested_switch1() throws SyntaxError{
 		
      if(s2.showTop() == null){
     	s2();
@@ -67,7 +69,7 @@ public class Parser{
     	
   }
     
-  void nested_switch2() throws SyntaxError{
+  private void nested_switch2() throws SyntaxError{
 	
 	if(s2.showTop() == null){
 		throw new SyntaxError("SyntaxError ");
@@ -88,7 +90,7 @@ public class Parser{
     }
   }
   
-  void nested_switch3() throws SyntaxError{
+  private void nested_switch3() throws SyntaxError{
 		
 		if(s2.showTop() == null){
 			uError();
@@ -109,7 +111,7 @@ public class Parser{
 	  }
   }
   
-  void nested_switch4() throws SyntaxError{
+  private void nested_switch4() throws SyntaxError{
 		
 	if(s2.showTop() == null){
 		uError();
@@ -118,7 +120,7 @@ public class Parser{
     }
   }
   
-  void nested_switch5() throws SyntaxError{
+  private void nested_switch5() throws SyntaxError{
 		
 		if(s2.showTop() == null||s2.showTop().equals("=")){
 			uError();
@@ -127,20 +129,20 @@ public class Parser{
 	    }
   }
 	
-	void s1(){
+	private void s1(){
 		s1.enqueue(inputSymbol);
 	}
 	
-    void s2(){
+    private void s2(){
 		s2.push(inputSymbol);
 	}
     
-    void u1() throws SyntaxError{
+    private void u1() throws SyntaxError{
 		s1.enqueue(s2.pop());
 		parseTable(inputSymbol);
 	}
     
-    void uc(){
+    private void uc(){
     	
     	while(!s2.isEmpty()){
     		
@@ -154,20 +156,20 @@ public class Parser{
 		}
 	}
     
-    public void unaryCheck(){
+    private void unaryCheck(){
     	
     	if(s2.showTop().contains("abs") || s2.showTop().contains("sin") || s2.showTop().contains("sqr")){
     		s1.enqueue(s2.pop());
     	}
     }
     
-    void u2(){
+    private void u2(){
 		while(!s2.isEmpty()){
 			s1.enqueue(s2.pop());
 		}
 	}
     
-    void uError() throws SyntaxError{
+    private void uError() throws SyntaxError{
     	throw new SyntaxError("SyntaxError ");
     }
   

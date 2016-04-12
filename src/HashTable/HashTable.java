@@ -2,6 +2,7 @@ package HashTable;
 
 import java.util.*;
 
+import Errors.SymbolNotFound;
 import HashTable.HashTable;
 
 import java.io.*;
@@ -101,14 +102,16 @@ public class HashTable{
     }	  
   }
   
- public double getData(String tempKey){
+  public double getData(String tempKey) throws SymbolNotFound{
 	 
 	 hashFunction(tempKey);
-	 
 	 int slotResult = buckets[index].searchBucket(tempKey);
 	 
-	 return buckets[index].slots[slotResult].getData();
+	 if(slotResult == -1){
+		 throw new SymbolNotFound("SymbolNotFound");
+	 }
 	 
+	 return buckets[index].slots[slotResult].getData();
  }
  
  public searchResult searchHash(String tempKey){
@@ -249,15 +252,6 @@ public class HashTable{
 	  avgChainLength = Math.floor(((double)totalChainLength/numChains)*100)/100;
 	  
 	  return avgChainLength;
-  }
-  
-  public static void main(String[] args){
-		
-	    
-		HashTable myHash = new HashTable();
-		myHash.initializeHT();
-		myHash.insert("alpha", 12000);
-		System.out.println(myHash.getData("alpha"));
   }
 }
 

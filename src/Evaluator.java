@@ -14,28 +14,68 @@
  * Queue // also used by Parser and Evaluator
  * 
  * Evaluator ---- 1:1 uses ----- Parser
- * Evaluator ---- 1:2 uses ----- Stack  //?
- * Parser ------- 1:1 uses ----- Stack  
- * Parser ------- 1:1 uses ----- Queue  
+ * Evaluator ---- 1:1 uses ----- Stack<String> 
+ * Parser ------- 1:1 uses ----- Stack<String>  
+ * Parser ------- 1:1 uses ----- Queue<String>  
  * Parser ------- 1:1 uses ----- StringTokenizer
+ * Parser ------- 1:m uses ----- SyntaxError
  * 
- * operator tokens::= {+,-,/,*,Sin,Cos,Sqrt,Abs}
- * operandTokens::={A,B,C,D}
+ * operator tokens::= {+,-,/,*,Sin,Sqr,Abs}
+ * operandTokens::={alpha,beta,charlie,delta}
  * ConstantTokens::={"1..9", "whole.decimal"}
  * 
- * postfix is queue of tokens
+ * Class Evaluator
+ * 
+ * Members
+ * (~)Stack<String> eval
+ * (~)HashTable symbols
+ * Methods
+ * (~)String unaryEval(String, String)  //takes an operand and an operator for evaluation, returns a string for the stack
+ * (~)String unaryEval(String, String, String)  //takes two operands and an operator for evaluation, returns a string for the stack
+ * (+)double evaluate(String) //takes a user input string and evaluates it to a double
+ * (+)void display() //displays the contents of alpha beta charlie delta and X from the symbol table 
+ * 
+ * Class Parser
+ * 
+ * Members
+ * (-)String toParse
+ * (-)String inputSymbol
+ * (-)List<String> tokens
+ * (-)Stack<String> s2
+ * (#)Queue<String> s1
+ * 
+ * Methods
+ * (~)void parseTable(String)  //takes an input symbol for evaluation
+ * (+)void parse()  //performs parse operation on toParse
+ * (-)void nested_switch1()  //called by the parse table
+ * (-)void nested_switch2()  //called by the parse table
+ * (-)void nested_switch3()  //called by the parse table
+ * (-)void nested_switch4()  //called by the parse table
+ * (-)void nested_switch5()  //called by the parse table
+ * (-)void s1()  //called by the parse table and various nested_switches
+ * (-)void s2()  //called by the parse table and various nested_switches
+ * (-)void u1()  //called by the parse table and various nested_switches
+ * (-)void uc()  //called by the parse table and various nested_switches
+ * (-)void unaryCheck()  //checks to see if a token is a unary operator
+ * (-)void u2()  // unstacks s2 on to the queue
+ * (-)void u1()  //called to throw a SyntaxError
+ * 
+ * Class SyntaxError
+ * 
  * 
  */
 
 import listadt.*;
 import listadt.Queue;
 import listadt.Stack;
+import Errors.SyntaxError;
+import Errors.SymbolNotFound;
 import HashTable.*;
+
 
 public class Evaluator {
   
   Stack<String> eval = new Stack<String>();
-  Queue<String> postfix = new Queue<String>();
   HashTable symbols = new HashTable();
   
   {
@@ -52,7 +92,13 @@ public class Evaluator {
 	  String result = "";
 	  
 	  if(data.matches("[a-zA-Z]+")){
-		  operand = symbols.getData(data);
+		  
+		  try{
+			  operand = symbols.getData(data);
+			}catch(SymbolNotFound e){
+				System.out.println(e.getMessage());
+			}
+		 
 	  }else{
 		  operand = Double.parseDouble(data);
 	  }
@@ -77,13 +123,21 @@ public class Evaluator {
 	  String result = "";
 	  
 	  if(data1.matches("[a-zA-Z]+")){
-		  right = symbols.getData(data1);
+		  try{
+			  right = symbols.getData(data1);
+			}catch(SymbolNotFound e){
+				System.out.println(e.getMessage());
+			}
 	  }else{
 		  right = Double.parseDouble(data1);
 	  }
 	  
 	  if(data2.matches("[a-zA-Z]+")){
-		  left = symbols.getData(data2);
+		  try{
+			  left = symbols.getData(data2);
+		  }catch(SymbolNotFound e){
+			  System.out.println(e.getMessage());
+		  }
 	  }else{
 		  left = Double.parseDouble(data2);
 	  }
@@ -252,16 +306,39 @@ public class Evaluator {
 	System.out.println("-------------------Actual------------------");
 	display(eze);
 	
+    System.out.println("userInput = \"= delta alpha - beta * charlie/delta\"");
+	
+	userInput = "= delta alpha - beta * charlie/delta";
+		
+	System.out.println("alpha   EXPECTED: 43.33333333333");
+	System.out.println("beta    EXPECTED: 45.83333333333");
+	System.out.println("charlie EXPECTED: -5.60436119243");
+	System.out.println("delta   EXPECTED: 66.68483830182");
+	System.out.println("X       EXPECTED: 336 ");
+		
+		try{
+		    System.out.println("charlie is:" + eze.evaluate(userInput));
+		}catch(SyntaxError e){
+			System.out.println(e.getMessage());
+		}
+	
+	System.out.println("-------------------Actual------------------");
+	display(eze);
+	
+	
+	
   }//end main
   
   public static void display(Evaluator eval){
-	  
-	System.out.println("alpha contains   :" + eval.symbols.getData("alpha"));
-	System.out.println("beta contains    :" + eval.symbols.getData("beta"));
-	System.out.println("charlie contains :" + eval.symbols.getData("charlie"));
-	System.out.println("delta contains   :" + eval.symbols.getData("delta"));
-	System.out.println("X contains       :" + eval.symbols.getData("X"));
-	  
+	try{  
+		System.out.println("alpha contains   :" + eval.symbols.getData("alpha"));
+		System.out.println("beta contains    :" + eval.symbols.getData("beta"));
+		System.out.println("charlie contains :" + eval.symbols.getData("charlie"));
+		System.out.println("delta contains   :" + eval.symbols.getData("delta"));
+		System.out.println("X contains       :" + eval.symbols.getData("X"));
+	}catch(SymbolNotFound e){
+		  System.out.println(e.getMessage());
+	  }  
 	
   }
 }
