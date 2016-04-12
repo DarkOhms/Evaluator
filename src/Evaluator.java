@@ -84,7 +84,7 @@ public class Evaluator {
 
 
 
-	String unaryEval(String data, String operator){
+	String unaryEval(String data, String operator) throws SymbolNotFound{
 		double operand = 0.0;
 		String result = "";
 
@@ -93,7 +93,7 @@ public class Evaluator {
 			try{
 				operand = symbols.getData(data);
 			}catch(SymbolNotFound e){
-				System.out.println(e.getMessage());
+				throw e;
 			}
 
 		}else{
@@ -112,7 +112,7 @@ public class Evaluator {
 		return result;
 	}
 
-	String binaryEval(String data1, String data2, String operator){
+	String binaryEval(String data1, String data2, String operator) throws SymbolNotFound{
 
 		double left = 0.0;
 		double right = 0.0;
@@ -123,7 +123,7 @@ public class Evaluator {
 			try{
 				right = symbols.getData(data1);
 			}catch(SymbolNotFound e){
-				System.out.println(e.getMessage());
+				throw e;
 			}
 		}else{
 			right = Double.parseDouble(data1);
@@ -133,7 +133,7 @@ public class Evaluator {
 			try{
 				left = symbols.getData(data2);
 			}catch(SymbolNotFound e){
-				System.out.println(e.getMessage());
+				throw e;
 			}
 		}else{
 			left = Double.parseDouble(data2);
@@ -153,7 +153,7 @@ public class Evaluator {
 		return result;
 	}
 
-	public double evaluate(String input) throws SyntaxError{
+	public double evaluate(String input) throws SyntaxError, SymbolNotFound{
 
 		//parse the infix
 		Parser parser = new Parser(input);
@@ -183,13 +183,21 @@ public class Evaluator {
 					case "-":
 					case "/":
 					case "*":
-						eval.push(binaryEval(eval.pop(), eval.pop(), parser.s1.dequeue()));
-						break;
+						if(eval.getCount() > 1){
+						  eval.push(binaryEval(eval.pop(), eval.pop(), parser.s1.dequeue()));
+						  break;
+						}else{
+							throw new SyntaxError();
+						}
 					case "sin":
 					case "sqr":
 					case "abs":
-						eval.push(unaryEval(eval.pop(), parser.s1.dequeue()));
-						break;
+						if(eval.getCount() > 0){
+						  eval.push(unaryEval(eval.pop(), parser.s1.dequeue()));
+						  break;
+						}else{
+							throw new SyntaxError();
+						}
 				}
 
 			}else{
@@ -308,11 +316,8 @@ public class Evaluator {
 
 		userInput = "= delta alpha - beta * charlie/delta";
 
-		System.out.println("alpha   EXPECTED: 43.33333333333");
-		System.out.println("beta    EXPECTED: 45.83333333333");
-		System.out.println("charlie EXPECTED: -5.60436119243");
-		System.out.println("delta   EXPECTED: 66.68483830182");
-		System.out.println("X       EXPECTED: 336 ");
+		System.out.println("EXPECTED: SyntaxError");
+		System.out.println("-------------------Actual------------------");
 
 		try{
 			System.out.println("charlie is:" + eze.evaluate(userInput));
@@ -320,8 +325,6 @@ public class Evaluator {
 			System.out.println(e.getMessage());
 		}
 
-		System.out.println("-------------------Actual------------------");
-		display(eze);
 	}//end main
 
 	public static void display(Evaluator eval){
