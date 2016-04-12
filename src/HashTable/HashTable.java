@@ -109,39 +109,6 @@ public class HashTable{
 		if(slotResult == -1){
 			throw new SymbolNotFound("SymbolNotFound");
 		}
-<<<<<<< HEAD
-  }
-  
- 
-  
-  public int getChainLength(bucket b){
-	  
-	 int length;
-	 length = b.count;
-	 if(b.hasOverflow()){
-		 length += overflow[b.getOverflow()].getCount() + 1;
-	 }
-	 return length;
-	  
-  }
-  public double averageChainLength(){
-	  
-	  int numChains = 0;
-	  int totalChainLength = 0;
-	  double avgChainLength = 0.0;
-	  
-	  for(int i = 0; i < buckets.length; i++){
-		  if(buckets[i].getCount() >0){
-			  numChains++;
-		  }
-		  totalChainLength += getChainLength(buckets[i]);
-	  }
-	  
-	  avgChainLength = Math.floor(((double)totalChainLength/numChains)*100)/100;
-	  
-	  return avgChainLength;
-  }
-=======
 
 		return buckets[index].slots[slotResult].getData();
 	}
@@ -264,7 +231,6 @@ public class HashTable{
 
 		return avgChainLength;
 	}
->>>>>>> origin/master
 }
 
 class bucket{
