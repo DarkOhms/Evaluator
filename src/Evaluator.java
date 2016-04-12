@@ -65,10 +65,6 @@
  *
  */
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 import listadt.Stack;
 import Errors.SyntaxError;
 import Errors.SymbolNotFound;
