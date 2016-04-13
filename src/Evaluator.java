@@ -15,6 +15,8 @@
  *
  * Evaluator ---- 1:1 uses ----- Parser
  * Evaluator ---- 1:1 uses ----- Stack<String>
+ * Evaluator ---- 1:m uses ----- SymbolNotFound
+ * Evaluator ---- 1:m uses ----- SyntaxError
  * Parser ------- 1:1 uses ----- Stack<String>
  * Parser ------- 1:1 uses ----- Queue<String>
  * Parser ------- 1:1 uses ----- StringTokenizer
@@ -29,6 +31,7 @@
  * Members
  * (~)Stack<String> eval
  * (~)HashTable symbols
+ * (~)boolean hasOperator
  * Methods
  * (~)String unaryEval(String, String)  //takes an operand and an operator for evaluation, returns a string for the stack
  * (~)String unaryEval(String, String, String)  //takes two operands and an operator for evaluation, returns a string for the stack
@@ -72,8 +75,9 @@ import HashTable.*;
 
 public class Evaluator {
 
-	Stack<String> eval = new Stack<>();
 	HashTable symbols = new HashTable();
+	
+	boolean hasOperator = false; //checks to make sure that expression is an operation and not an assignment
 
 	{
 		symbols.insert("alpha", 25);
@@ -93,6 +97,7 @@ public class Evaluator {
 			try{
 				operand = symbols.getData(data);
 			}catch(SymbolNotFound e){
+				hasOperator = false; //reset operator flag
 				throw e;
 			}
 
@@ -123,6 +128,7 @@ public class Evaluator {
 			try{
 				right = symbols.getData(data1);
 			}catch(SymbolNotFound e){
+				hasOperator = false; //reset operator flag
 				throw e;
 			}
 		}else{
@@ -133,6 +139,7 @@ public class Evaluator {
 			try{
 				left = symbols.getData(data2);
 			}catch(SymbolNotFound e){
+				hasOperator = false; //reset operator flag
 				throw e;
 			}
 		}else{
@@ -156,6 +163,7 @@ public class Evaluator {
 	public double evaluate(String input) throws SyntaxError, SymbolNotFound{
 
 		//parse the infix
+		Stack<String> eval = new Stack<>();
 		Parser parser = new Parser(input);
 		parser.parse();
 
@@ -166,17 +174,28 @@ public class Evaluator {
 		eval.push(parser.s1.dequeue());
 		double data = 0.0;
 
+		if(parser.s1.getCount() < 1){
+			throw new SyntaxError();
+		}
 		while(!parser.s1.isEmpty()){
 
 			if(parser.s1.firstInLine().matches("=")){
 
-				data = Double.parseDouble(eval.pop());
-				String key = eval.pop();
-				symbols.insert(key, data);
-				return data;
+				if(hasOperator){
+					data = Double.parseDouble(eval.pop());
+					String key = eval.pop();
+					symbols.insert(key, data);
+					hasOperator = false;  //resets
+					return data;
+				}else{
+					throw new SyntaxError();
+				}
 			}
+			
 			if(parser.s1.firstInLine().matches("\\+|\\*|/|sin|sqr|abs|-")){
 				//use the operator to evaluate the eval stack
+				hasOperator = true;
+				
 				switch(parser.s1.firstInLine()){
 
 					case "+":
@@ -219,7 +238,7 @@ public class Evaluator {
 		System.out.println("symbols.insert(\"charlie\", 6)");
 		System.out.println("symbols.insert(\"delta\", 11)");
 
-		System.out.println("userInput = X=12*(alpha+3) ");
+		System.out.println("userInput: X=12*(alpha+3) ");
 
 		System.out.println("alpha   EXPECTED: 25");
 		System.out.println("beta    EXPECTED: 10");
@@ -229,14 +248,14 @@ public class Evaluator {
 
 		try{
 			System.out.println("X is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 
 		System.out.println("-------------------Actual------------------");
 		display(eze);
 
-		System.out.println("userInput = \"alpha = alpha + beta / charlie * delta\"");
+		System.out.println("userInput: alpha = alpha + beta / charlie * delta");
 
 		userInput = "alpha = alpha + beta / charlie * delta";
 
@@ -248,14 +267,14 @@ public class Evaluator {
 
 		try{
 			System.out.println("alpha is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 
 		System.out.println("-------------------Actual------------------");
 		display(eze);
 
-		System.out.println("userInput = \"beta = 5/2.0 + alpha\"");
+		System.out.println("userInput: beta = 5/2.0 + alpha");
 
 		userInput = "beta = 5/2.0 + alpha";
 
@@ -267,14 +286,14 @@ public class Evaluator {
 
 		try{
 			System.out.println("beta is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 
 		System.out.println("-------------------Actual------------------");
 		display(eze);
 
-		System.out.println("userInput = \"charlie = sin(alpha) + (charlie-delta)\"");
+		System.out.println("userInput: charlie = sin(alpha) + (charlie-delta)");
 
 		userInput = "charlie = sin(alpha) + (charlie-delta)";
 
@@ -286,14 +305,14 @@ public class Evaluator {
 
 		try{
 			System.out.println("charlie is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 
 		System.out.println("-------------------Actual------------------");
 		display(eze);
 
-		System.out.println("userInput = \"delta = alpha - beta * charlie/delta\"");
+		System.out.println("userInput: delta = alpha - beta * charlie/delta");
 
 		userInput = "delta = alpha - beta * charlie/delta";
 
@@ -304,15 +323,15 @@ public class Evaluator {
 		System.out.println("X       EXPECTED: 336 ");
 
 		try{
-			System.out.println("charlie is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+			System.out.println("delta is:" + eze.evaluate(userInput));
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 
 		System.out.println("-------------------Actual------------------");
 		display(eze);
 
-		System.out.println("userInput = \"= delta alpha - beta * charlie/delta\"");
+		System.out.println("userInput: = delta alpha - beta * charlie/delta");
 
 		userInput = "= delta alpha - beta * charlie/delta";
 
@@ -320,12 +339,12 @@ public class Evaluator {
 		System.out.println("-------------------Actual------------------");
 
 		try{
-			System.out.println("charlie is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+			System.out.println("? is:" + eze.evaluate(userInput));
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 		
-		System.out.println("userInput = \"-  - + *\"");
+		System.out.println("userInput: -  - + *");
 
 		userInput = "- - + *";
 
@@ -333,23 +352,54 @@ public class Evaluator {
 		System.out.println("-------------------Actual------------------");
 
 		try{
-			System.out.println("charlie is:" + eze.evaluate(userInput));
-		}catch(SyntaxError e){
+			System.out.println("? is:" + eze.evaluate(userInput));
+		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
 		
-		System.out.println("userInput = \"alpha + zeta\"");
+		System.out.println("userInput: beta = alpha + zeta");
 
-		userInput = "alpha + zeta";
+		userInput = "beta = alpha + zeta";
 
 		System.out.println("EXPECTED: SymbolNotFound");
 		System.out.println("-------------------Actual------------------");
 
 		try{
-			System.out.println("charlie is:" + eze.evaluate(userInput));
+			System.out.println("beta is:" + eze.evaluate(userInput));
 		}catch(SyntaxError | SymbolNotFound e){
 			System.out.println(e.getMessage());
 		}
+		
+		System.out.println("userInput = \"alpha beta delta\"");
+
+		userInput = "alpha beta delta";
+
+		System.out.println("EXPECTED: SyntaxError");
+		System.out.println("-------------------Actual------------------");
+
+		try{
+			System.out.println("? is:" + eze.evaluate(userInput));
+		}catch(SyntaxError | SymbolNotFound e){
+			System.out.println(e.getMessage());
+		}
+		System.out.println("userInput: alpha = beta");
+
+		userInput = "alpha = beta";
+
+		System.out.println("alpha   EXPECTED: 45.83333333333");
+		System.out.println("beta    EXPECTED: 45.83333333333");
+		System.out.println("charlie EXPECTED: -5.60436119243");
+		System.out.println("delta   EXPECTED: 66.68483830182");
+		System.out.println("X       EXPECTED: 336 ");
+		System.out.println("-------------------Actual------------------");
+
+		try{
+			System.out.println("alpha is:" + eze.evaluate(userInput));
+		}catch(SyntaxError | SymbolNotFound e){
+			System.out.println(e.getMessage());
+		}
+		display(eze);
+
 
 	}//end main
 
