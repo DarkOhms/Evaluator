@@ -29,9 +29,7 @@
  * Class Evaluator
  *
  * Members
- * (~)Stack<String> eval
  * (~)HashTable symbols
- * (~)boolean hasOperator
  * Methods
  * (~)String unaryEval(String, String)  //takes an operand and an operator for evaluation, returns a string for the stack
  * (~)String unaryEval(String, String, String)  //takes two operands and an operator for evaluation, returns a string for the stack
@@ -97,7 +95,6 @@ public class Evaluator {
 			try{
 				operand = symbols.getData(data);
 			}catch(SymbolNotFound e){
-				hasOperator = false; //reset operator flag
 				throw e;
 			}
 
@@ -128,7 +125,6 @@ public class Evaluator {
 			try{
 				right = symbols.getData(data1);
 			}catch(SymbolNotFound e){
-				hasOperator = false; //reset operator flag
 				throw e;
 			}
 		}else{
@@ -139,7 +135,6 @@ public class Evaluator {
 			try{
 				left = symbols.getData(data2);
 			}catch(SymbolNotFound e){
-				hasOperator = false; //reset operator flag
 				throw e;
 			}
 		}else{
@@ -165,6 +160,8 @@ public class Evaluator {
 		//parse the infix
 		Stack<String> eval = new Stack<>();
 		Parser parser = new Parser(input);
+		boolean hasOperator = false; //checks to make sure that expression is an operation and not an assignment
+		
 		parser.parse();
 
 		//prime the eval stack with the symbol for assignment
@@ -175,7 +172,7 @@ public class Evaluator {
 		double data = 0.0;
 
 		if(parser.s1.getCount() < 1){
-			throw new SyntaxError();
+			throw new SyntaxError("SyntaxError");
 		}
 		while(!parser.s1.isEmpty()){
 
@@ -185,10 +182,9 @@ public class Evaluator {
 					data = Double.parseDouble(eval.pop());
 					String key = eval.pop();
 					symbols.insert(key, data);
-					hasOperator = false;  //resets
 					return data;
 				}else{
-					throw new SyntaxError();
+					throw new SyntaxError("SyntaxError:Evaluator does not assign without evaluation");
 				}
 			}
 			
@@ -206,7 +202,7 @@ public class Evaluator {
 						  eval.push(binaryEval(eval.pop(), eval.pop(), parser.s1.dequeue()));
 						  break;
 						}else{
-							throw new SyntaxError();
+							throw new SyntaxError("SyntaxError");
 						}
 					case "sin":
 					case "sqr":
@@ -215,7 +211,7 @@ public class Evaluator {
 						  eval.push(unaryEval(eval.pop(), parser.s1.dequeue()));
 						  break;
 						}else{
-							throw new SyntaxError();
+							throw new SyntaxError("SyntaxError");
 						}
 				}
 
@@ -386,7 +382,7 @@ public class Evaluator {
 
 		userInput = "alpha = beta";
 
-		System.out.println("alpha   EXPECTED: 45.83333333333");
+		System.out.println("alpha   EXPECTED: 43.33333333333");
 		System.out.println("beta    EXPECTED: 45.83333333333");
 		System.out.println("charlie EXPECTED: -5.60436119243");
 		System.out.println("delta   EXPECTED: 66.68483830182");
