@@ -1,0 +1,73 @@
+Luke Martin
+ * w0742587
+ * Dixon CISP 430 - W 6:30
+ * Spring 2016
+ * Assignment 3
+ *
+ * Class Associations
+ *
+ * Evaluator // performs evaluation of a string input into a numerical answer of the highest common precision
+ * Parser // takes an infix expression and makes a postfix expression for evaluation
+ * Tokenizer //makes tokens from the input string
+ * HashTable  // stores and retrieves tokens for processing by the evaluator
+ * Stack // used by Parser and Evaluator
+ * Queue // also used by Parser and Evaluator
+ *
+ * Evaluator ---- 1:1 uses ----- Parser
+ * Evaluator ---- 1:1 uses ----- Stack<String>
+ * Evaluator ---- 1:m uses ----- SymbolNotFound
+ * Evaluator ---- 1:m uses ----- SyntaxError
+ * Parser ------- 1:1 uses ----- Stack<String>
+ * Parser ------- 1:1 uses ----- Queue<String>
+ * Parser ------- 1:1 uses ----- StringTokenizer
+ * Parser ------- 1:m uses ----- SyntaxError
+ *
+ * operator tokens::= {+,-,/,*,Sin,Sqr,Abs}
+ * operandTokens::={alpha,beta,charlie,delta}
+ * ConstantTokens::={"1..9", "whole.decimal"}
+ *
+ * Class Evaluator
+ *
+ * Members
+ * (~)HashTable symbols
+ * Methods
+ * (~)String unaryEval(String, String)  //takes an operand and an operator for evaluation, returns a string for the stack
+ * (~)String unaryEval(String, String, String)  //takes two operands and an operator for evaluation, returns a string for the stack
+ * (+)double evaluate(String) //takes a user input string and evaluates it to a double
+ * (+)void display() //displays the contents of alpha beta charlie delta and X from the symbol table
+ *
+ * Class Parser
+ *
+ * Members
+ * (-)String toParse
+ * (-)String inputSymbol
+ * (-)List<String> tokens
+ * (-)Stack<String> s2
+ * (#)Queue<String> s1
+ *
+ * Methods
+ * (~)void parseTable(String)  //takes an input symbol for evaluation
+ * (+)void parse()  //performs parse operation on toParse
+ * (-)void nested_switch1()  //called by the parse table
+ * (-)void nested_switch2()  //called by the parse table
+ * (-)void nested_switch3()  //called by the parse table
+ * (-)void nested_switch4()  //called by the parse table
+ * (-)void nested_switch5()  //called by the parse table
+ * (-)void s1()  //called by the parse table and various nested_switches
+ * (-)void s2()  //called by the parse table and various nested_switches
+ * (-)void u1()  //called by the parse table and various nested_switches
+ * (-)void uc()  //called by the parse table and various nested_switches
+ * (-)void unaryCheck()  //checks to see if a token is a unary operator
+ * (-)void u2()  // unstacks s2 on to the queue
+ * (-)void u1()  //called to throw a SyntaxError
+ *
+ * Class SyntaxError
+ * 
+ * Methods
+ * (~)void SyntaxError
+ * 
+ * Class SymbolNotFound
+ * 
+ * Methods
+ * (~)void SymbolNotFound
+ *

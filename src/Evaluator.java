@@ -2,7 +2,10 @@
  * Evaluator class
  *
  * Luke Martin
- * Dixon CISP 430
+ * w0742587
+ * Dixon CISP 430 - W 6:30
+ * Spring 2016
+ * Assignment 3
  *
  * Class Associations
  *
@@ -62,7 +65,14 @@
  * (-)void u1()  //called to throw a SyntaxError
  *
  * Class SyntaxError
- *
+ * 
+ * Methods
+ * (~)void SyntaxError
+ * 
+ * Class SymbolNotFound
+ * 
+ * Methods
+ * (~)void SymbolNotFound
  *
  */
 
@@ -70,6 +80,7 @@ import listadt.Stack;
 import Errors.SyntaxError;
 import Errors.SymbolNotFound;
 import HashTable.*;
+import java.util.*;
 
 public class Evaluator {
 
@@ -184,7 +195,17 @@ public class Evaluator {
 					symbols.insert(key, data);
 					return data;
 				}else{
-					throw new SyntaxError("SyntaxError:Evaluator does not assign without evaluation");
+					if(eval.showTop().matches("[a-zA-Z]+")){
+
+						try{
+							data = symbols.getData(eval.pop());
+							String key = eval.pop();
+							symbols.insert(key, data);
+							return data;
+						}catch(SymbolNotFound e){
+							throw e;
+						}
+					}
 				}
 			}
 			
@@ -395,6 +416,24 @@ public class Evaluator {
 			System.out.println(e.getMessage());
 		}
 		display(eze);
+		
+		Scanner scan = new Scanner(System.in);
+		
+		do{
+			System.out.println("------------------------------------------------------");
+			System.out.println("Enter an expression for evaluation (\"exit to exit\"):");
+			userInput = scan.nextLine();
+			if (userInput.equalsIgnoreCase("exit"))
+                break;
+			try{
+				eze.evaluate(userInput);
+			}catch(SyntaxError | SymbolNotFound e){
+				System.out.println(e.getMessage());
+			}
+			display(eze);
+			
+		}while(!userInput.equals("exit"));
+		scan.close();
 
 
 	}//end main
